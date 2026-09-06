@@ -1,0 +1,1154 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namma Filter Coffee Shop</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Work+Sans:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --cream: #f8f1e6;
+            --paper: #fffaf2;
+            --coffee: #432b20;
+            --caramel: #b96e3b;
+            --beige: #e8d5bd;
+            --sage: #7d9175;
+            --sage-soft: #e5ecdf;
+            --line: #d7bea1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Work Sans", sans-serif;
+            color: var(--coffee);
+            margin: 0;
+            background-color: var(--cream);
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Fraunces", serif;
+        }
+
+        .site-shell {
+            width: 100%;
+            overflow: hidden;
+            background-image: radial-gradient(rgba(185, 110, 59, .12) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .topbar {
+            background: rgba(255, 250, 242, .94);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(215, 190, 161, .75);
+        }
+
+        .nav-link {
+            color: var(--coffee);
+            font-weight: 600;
+            padding: .7rem .8rem;
+            border-radius: 999px;
+            transition: background .2s ease, color .2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus-visible {
+            background: var(--sage-soft);
+            outline: 3px solid transparent;
+            color: #344631;
+        }
+
+        .hero-panel {
+            background: #f1dfc8;
+            border: 1px solid var(--line);
+            box-shadow: 0 18px 45px rgba(67, 43, 32, .10);
+        }
+
+        .photo-frame {
+            border: 8px solid #fffaf2;
+            box-shadow: 11px 12px 0 #d6b790;
+        }
+
+        .section-heading {
+            letter-spacing: -.02em;
+        }
+
+        .blend-card,
+        .fact-card,
+        .condiment-card {
+            border: 1px solid var(--line);
+            box-shadow: 0 8px 20px rgba(67, 43, 32, .06);
+        }
+
+        .blend-card {
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .blend-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 26px rgba(67, 43, 32, .12);
+        }
+
+        .grind-card {
+            border: 2px solid var(--line);
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
+            position: relative;
+        }
+
+        .grind-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 26px rgba(67, 43, 32, .12);
+            border-color: #b96e3b;
+        }
+
+        .grind-card.is-selected {
+            border-color: #b96e3b;
+            background-color: #fffaf2;
+            box-shadow: 0 12px 28px rgba(185, 110, 59, .18);
+        }
+
+        .bean-card {
+            position: relative;
+            min-height: 260px;
+            overflow: hidden;
+            background: #432b20;
+            border: 1px solid var(--line);
+        }
+
+        .bean-card-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .35s ease, filter .35s ease;
+        }
+
+        .bean-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(67, 43, 32, .15) 25%, rgba(67, 43, 32, .92) 100%);
+            pointer-events: none;
+        }
+
+        .bean-card:hover .bean-card-image,
+        .bean-card:focus-within .bean-card-image {
+            transform: scale(1.06);
+            filter: saturate(1.08);
+        }
+
+        .bean-card-content {
+            position: absolute;
+            z-index: 1;
+            inset: auto 1.25rem 1.25rem;
+            color: #fffaf2;
+        }
+
+        .bean-card-info {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: max-height .3s ease, opacity .3s ease, transform .3s ease;
+        }
+
+        .bean-card:hover .bean-card-info,
+        .bean-card:focus-within .bean-card-info {
+            max-height: 120px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bean-card-title {
+            color: #fffaf2 !important;
+            margin-bottom: .4rem;
+            font-size: 1.25rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .bean-card-text {
+            color: #f1dfc8 !important;
+            font-size: 0.875rem;
+        }
+
+        .option-button {
+            min-height: 58px;
+            color: var(--coffee);
+            background: #fffaf2;
+            border: 2px solid #dcc4a6;
+            border-radius: 16px;
+            font-weight: 600;
+            padding: .8rem 1rem;
+            transition: all .18s ease;
+        }
+
+        .option-button:hover,
+        .option-button:focus-visible {
+            border-color: var(--sage);
+            background: #f3f7ef;
+            outline: 3px solid rgba(125, 145, 117, .25);
+            outline-offset: 2px;
+        }
+
+        .option-button.is-selected {
+            color: #fffaf2;
+            background: var(--coffee);
+            border-color: var(--coffee);
+            box-shadow: 0 6px 0 #b7865d;
+            transform: translateY(-2px);
+        }
+
+        .summary-box {
+            background: #e5ecdf;
+            border: 1px dashed #7d9175;
+        }
+
+        .doodle {
+            color: #a95f34;
+            opacity: .72;
+        }
+
+        .condiment-card {
+            border: 1px solid var(--line);
+            box-shadow: 0 8px 20px rgba(67, 43, 32, .06);
+            transition: transform .25s ease, box-shadow .25s ease;
+            cursor: pointer;
+        }
+
+        .condiment-card:hover,
+        .condiment-card:focus-visible {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 26px rgba(67, 43, 32, .12);
+        }
+
+        .condiment-image-wrap {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .condiment-image {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform .35s ease;
+        }
+
+        .condiment-card:hover .condiment-image,
+        .condiment-card:focus-visible .condiment-image {
+            transform: scale(1.04);
+        }
+
+        .call-button {
+            background: #fffaf2;
+            color: #432b20;
+            min-height: 58px;
+            box-shadow: 0 6px 0 #b7865d;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .call-button:hover,
+        .call-button:focus-visible {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #b7865d;
+            outline: 3px solid rgba(232, 213, 189, .4);
+            outline-offset: 3px;
+        }
+
+        .explore-button {
+            background: #7d9175;
+            color: #ffffff;
+            min-height: 58px;
+            transition: background .2s ease, transform .2s ease;
+        }
+
+        .explore-button:hover,
+        .explore-button:focus-visible {
+            background: #5c7155;
+            transform: translateY(-2px);
+            outline: 3px solid rgba(67, 43, 32, .25);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 640px) {
+            .photo-frame {
+                box-shadow: 7px 8px 0 #d6b790;
+            }
+
+            .condiment-image {
+                height: 145px;
+            }
+        }
+    </style>
+</head>
+
+<body data-template-id="__page-root">
+    <div class="site-shell">
+        <header class="topbar sticky top-0 z-30 w-full">
+            <nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6"
+                aria-label="Primary navigation">
+                <a href="#home"
+                    class="flex items-center gap-2 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#d7bea1]">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#432b20] text-[#fffaf2]"
+                        aria-hidden="true">
+                        <i data-lucide="coffee" width="19" height="19"></i>
+                    </span>
+                    <span data-template-id="nav-shop-name" class="canva-text font-semibold text-lg text-[#432b20]">New
+                        Coffee Day</span>
+                </a>
+                <div class="flex items-center gap-1 sm:gap-3">
+                    <a data-template-id="nav-home" class="canva-link nav-link text-sm sm:text-base"
+                        href="#home">Home</a>
+                    <a data-template-id="nav-grind" class="canva-link nav-link text-sm sm:text-base"
+                        href="#grind">Grind</a>
+                    <a data-template-id="nav-facts" class="canva-link nav-link text-sm sm:text-base"
+                        href="#facts">Facts</a>
+                    <a data-template-id="nav-contact" class="canva-link nav-link text-sm sm:text-base"
+                        href="#contact">Contact</a>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <!-- HERO SECTION -->
+            <section id="home" class="mx-auto w-full max-w-6xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+                <div data-template-id="hero-section"
+                    class="canva-section hero-panel relative grid overflow-hidden rounded-[2rem] p-5 sm:p-9 lg:grid-cols-[1.03fr_.97fr] lg:gap-10 lg:p-12">
+                    <div class="relative z-10 flex flex-col justify-center py-4 lg:py-8">
+                        <p data-template-id="hero-kicker"
+                            class="canva-text mb-4 font-semibold uppercase tracking-[.18em] text-[#a95f34]">
+                            YOUR FAVOURITE FILTER COFFEE
+                        </p>
+                        <h1 data-template-id="hero-title"
+                            class="canva-text section-heading mb-5 font-semibold text-4xl sm:text-5xl leading-[1.1] text-[#432b20]">
+                            A comforting cup, made the familiar way.
+                        </h1>
+                        <p data-template-id="hero-intro" class="canva-text max-w-xl text-lg leading-8 text-[#5c4234]">
+                            Welcome to New Coffee Day — a warm little place for classic coffee, honest blends, and
+                            some authentic seasoning and snacks
+                        </p>
+                        <a data-template-id="explore-button"
+                            class="canva-button explore-button mt-8 inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 font-bold sm:w-fit"
+                            href="#usuals">
+                            <span data-template-id="explore-button-label" class="canva-text">Explore our coffee</span>
+                            <i data-lucide="arrow-down" width="20" height="20" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="relative mt-6 flex items-center lg:mt-0">
+                        <svg class="doodle absolute -right-5 -top-4 h-24 w-24 rotate-12" viewBox="0 0 120 120"
+                            fill="none" aria-hidden="true">
+                            <path d="M20 75h49c7 0 12-6 12-13V39H29v23c0 7 5 13 12 13Z" stroke="currentColor"
+                                stroke-width="2.5" />
+                            <path d="M81 47h7c11 0 14 20 0 20h-7M25 91h61" stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <path d="M42 28c-7-8 6-12 0-21M59 28c-7-8 6-12 0-21" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" />
+                        </svg>
+                        <img data-template-id="hero-image" src="images/hero.png"
+                            alt="Barista pouring steamed milk into coffee" loading="lazy"
+                            class="canva-image photo-frame relative w-full rounded-[1.5rem] object-cover"
+                            style="height: min(440px, 70vw);">
+                    </div>
+                </div>
+            </section>
+
+            <!-- THE USUALS -->
+            <section id="usuals" class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+                <div class="mb-9 max-w-2xl">
+                    <p data-template-id="usuals-kicker"
+                        class="canva-text mb-2 font-semibold uppercase tracking-[.16em] text-[#7d9175]">
+                        THE USUALS ☕
+                    </p>
+                    <h2 data-template-id="usuals-title"
+                        class="canva-text section-heading mb-3 text-3xl sm:text-4xl font-semibold text-[#432b20]">
+                        The blends our regulars love
+                    </h2>
+                    <p data-template-id="usuals-description"
+                        class="canva-text text-base sm:text-lg leading-7 text-[#684b3c]">
+                        The numbers show the balance of Coffee / Chicory in every blend. Simple, familiar, and easy to
+                        choose.
+                    </p>
+                </div>
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    <article data-template-id="usual-card-80"
+                        class="canva-card blend-card rounded-[1.5rem] bg-[#fffaf2] p-6">
+                        <div class="mb-5 flex items-center justify-between">
+                            <span class="rounded-full bg-[#432b20] p-3 font-bold text-[#fffaf2]">
+                                <i data-lucide="coffee" width="18" height="18"></i>
+                            </span>
+                            <span data-template-id="usual-tag-80"
+                                class="canva-tag rounded-full bg-[#f1dfc8] px-4 py-1.5 text-sm font-semibold text-[#8d532e]">
+                                Ultra Rich
+                            </span>
+                        </div>
+                        <h3 data-template-id="usual-name-80"
+                            class="canva-text mb-3 text-3xl font-semibold text-[#432b20]">
+                            80 / 20
+                        </h3>
+                        <p data-template-id="usual-text-80" class="canva-text leading-7 text-[#684b3c]">
+                            80% Coffee / 20% Chicory. Rich coffee character with just enough chicory warmth.
+                        </p>
+                    </article>
+
+                    <article data-template-id="usual-card-70"
+                        class="canva-card blend-card rounded-[1.5rem] bg-[#fffaf2] p-6">
+                        <div class="mb-5 flex items-center justify-between">
+                            <span class="rounded-full bg-[#432b20] p-3 font-bold text-[#fffaf2]">
+                                <i data-lucide="coffee" width="18" height="18"></i>
+                            </span>
+                            <span data-template-id="usual-tag-70"
+                                class="canva-tag rounded-full bg-[#e5ecdf] px-4 py-1.5 text-sm font-semibold text-[#486044]">
+                                Strong
+                            </span>
+                        </div>
+                        <h3 data-template-id="usual-name-70"
+                            class="canva-text mb-3 text-3xl font-semibold text-[#432b20]">
+                            70 / 30
+                        </h3>
+                        <p data-template-id="usual-text-70" class="canva-text leading-7 text-[#684b3c]">
+                            70% Coffee / 30% Chicory. A smooth, traditional cup with a rounded, comforting finish.
+                        </p>
+                    </article>
+
+                    <article data-template-id="usual-card-65"
+                        class="canva-card blend-card rounded-[1.5rem] bg-[#fffaf2] p-6">
+                        <div class="mb-5 flex items-center justify-between">
+                            <span class="rounded-full bg-[#432b20] p-3 font-bold text-[#fffaf2]">
+                                <i data-lucide="coffee" width="18" height="18"></i>
+                            </span>
+                            <span data-template-id="usual-tag-65"
+                                class="canva-tag rounded-full bg-[#e8d5bd] px-4 py-1.5 text-sm font-semibold text-[#5c4234]">
+                                Bright
+                            </span>
+                        </div>
+                        <h3 data-template-id="usual-name-65"
+                            class="canva-text mb-3 text-3xl font-semibold text-[#432b20]">
+                            65 / 35
+                        </h3>
+                        <p data-template-id="usual-text-65" class="canva-text leading-7 text-[#684b3c]">
+                            65% Coffee / 35% Chicory. A harmonious blend offering strong coffee notes with a smooth,
+                            lingering warmth.
+                        </p>
+                    </article>
+
+                    <article data-template-id="usual-card-60"
+                        class="canva-card blend-card rounded-[1.5rem] bg-[#fffaf2] p-6">
+                        <div class="mb-5 flex items-center justify-between">
+                            <span class="rounded-full bg-[#432b20] p-3 font-bold text-[#fffaf2]">
+                                <i data-lucide="coffee" width="18" height="18"></i>
+                            </span>
+                            <span data-template-id="usual-tag-60"
+                                class="canva-tag rounded-full bg-[#f4e8da] px-4 py-1.5 text-sm font-semibold text-[#8d532e]">
+                                Spoorthy
+                            </span>
+                        </div>
+                        <h3 data-template-id="usual-name-60"
+                            class="canva-text mb-3 text-3xl font-semibold text-[#432b20]">
+                            60 / 40
+                        </h3>
+                        <p data-template-id="usual-text-60" class="canva-text leading-7 text-[#684b3c]">
+                            60% Coffee / 40% Chicory. A deeply traditional blend with a full-bodied, gentle sweetness.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- CHOOSE YOUR GRIND -->
+            <section id="grind"
+                class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20 border-t border-[#d7bea1]/40">
+                <div class="mb-9 max-w-2xl">
+                    <p data-template-id="grind-kicker"
+                        class="canva-text mb-2 font-semibold uppercase tracking-[.16em] text-[#7d9175]">
+                        CHOOSE YOUR GRIND ☕
+                    </p>
+                    <h2 data-template-id="grind-title"
+                        class="canva-text section-heading mb-3 text-3xl sm:text-4xl font-semibold text-[#432b20]">
+                        Same blend. Two ways to grind.
+                    </h2>
+                    <p data-template-id="grind-description"
+                        class="canva-text text-base sm:text-lg leading-7 text-[#684b3c]">
+                        Choose the grind that suits your perfect cup. Our blends are available in Filter and Nice
+                        grinds, so you can pick the texture that feels right for your brewing style.
+                    </p>
+                </div>
+
+                <div class="grid gap-5 md:grid-cols-2" role="radiogroup" aria-label="Select coffee grind variant">
+                    <!-- CARD 1: FILTER GRIND -->
+                    <article data-template-id="grind-card-filter"
+                        class="canva-card blend-card grind-card is-selected rounded-[1.5rem] bg-[#fffaf2] p-6 sm:p-7 cursor-pointer"
+                        tabindex="0" role="radio" aria-checked="true" data-grind="filter">
+                        <div class="mb-5 flex items-center justify-between">
+                            <span class="rounded-full bg-[#432b20] p-3 font-bold text-[#fffaf2]" aria-hidden="true">
+                                <i data-lucide="coffee" width="18" height="18"></i>
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <span data-template-id="grind-selected-badge-filter"
+                                    class="grind-selected-badge rounded-full bg-[#432b20] px-3 py-1 text-xs font-semibold text-[#fffaf2] flex items-center gap-1">
+                                    <i data-lucide="check" width="13" height="13"></i> Selected
+                                </span>
+                                <span data-template-id="grind-tag-filter"
+                                    class="canva-tag rounded-full bg-[#f1dfc8] px-4 py-1.5 text-sm font-semibold text-[#8d532e]">
+                                    Classic
+                                </span>
+                            </div>
+                        </div>
+                        <h3 data-template-id="grind-name-filter"
+                            class="canva-text mb-3 text-3xl font-semibold text-[#432b20]">
+                            Filter Grind
+                        </h3>
+                        <p data-template-id="grind-text-filter" class="canva-text leading-7 text-[#684b3c] mb-6">
+                            A slightly coarser grind made for traditional South Indian filter coffee. The larger
+                            particles allow a steady flow through the filter and give you a familiar, classic decoction.
+                        </p>
+
+                        <!-- Powder texture visual representation -->
+                        <div
+                            class="mt-auto rounded-xl bg-[#f4e8da] border border-[#d7bea1] p-3.5 sm:p-4 flex items-center gap-3.5">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-[#432b20] flex items-center justify-center relative overflow-hidden shadow-inner"
+                                title="Filter Grind powder texture representation">
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8" cy="9" r="3" fill="#e8d5bd" />
+                                    <circle cx="20" cy="7" r="3.5" fill="#c49a6c" />
+                                    <circle cx="29" cy="14" r="3" fill="#e8d5bd" />
+                                    <circle cx="13" cy="20" r="4" fill="#d7bea1" />
+                                    <circle cx="25" cy="27" r="3.5" fill="#e8d5bd" />
+                                    <circle cx="7" cy="29" r="3" fill="#c49a6c" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold uppercase tracking-wider text-[#7d9175]">Powder
+                                    Texture</span>
+                                <span class="text-sm font-medium text-[#432b20]">Slightly coarser particles • Steady
+                                    flow</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- CARD 2: NICE GRIND -->
+                    <article data-template-id="grind-card-nice"
+                        class="canva-card blend-card grind-card rounded-[1.5rem] bg-[#fffaf2] p-6 sm:p-7 cursor-pointer"
+                        tabindex="0" role="radio" aria-checked="false" data-grind="nice">
+                        <div class="mb-5 flex items-center justify-between">
+                            <span class="rounded-full bg-[#432b20] p-3 font-bold text-[#fffaf2]" aria-hidden="true">
+                                <i data-lucide="coffee" width="18" height="18"></i>
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <span data-template-id="grind-selected-badge-nice"
+                                    class="grind-selected-badge hidden rounded-full bg-[#432b20] px-3 py-1 text-xs font-semibold text-[#fffaf2] flex items-center gap-1">
+                                    <i data-lucide="check" width="13" height="13"></i> Selected
+                                </span>
+                                <span data-template-id="grind-tag-nice"
+                                    class="canva-tag rounded-full bg-[#e5ecdf] px-4 py-1.5 text-sm font-semibold text-[#486044]">
+                                    Fine &amp; Smooth
+                                </span>
+                            </div>
+                        </div>
+                        <h3 data-template-id="grind-name-nice"
+                            class="canva-text mb-3 text-3xl font-semibold text-[#432b20]">
+                            Nice Grind
+                        </h3>
+                        <p data-template-id="grind-text-nice" class="canva-text leading-7 text-[#684b3c] mb-6">
+                            A finer, smoother grind with smaller particles for a richer, more intense decoction. Ideal
+                            if you prefer your coffee powder to have a softer, finer texture.
+                        </p>
+
+                        <!-- Powder texture visual representation -->
+                        <div
+                            class="mt-auto rounded-xl bg-[#f4e8da] border border-[#d7bea1] p-3.5 sm:p-4 flex items-center gap-3.5">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-[#432b20] flex items-center justify-center relative overflow-hidden shadow-inner"
+                                title="Nice Grind powder texture representation">
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="1.3" fill="#e8d5bd" />
+                                    <circle cx="13" cy="5" r="1.5" fill="#c49a6c" />
+                                    <circle cx="20" cy="7" r="1.3" fill="#e8d5bd" />
+                                    <circle cx="27" cy="5" r="1.5" fill="#c49a6c" />
+                                    <circle cx="32" cy="10" r="1.3" fill="#e8d5bd" />
+                                    <circle cx="9" cy="14" r="1.5" fill="#e8d5bd" />
+                                    <circle cx="16" cy="16" r="1.3" fill="#c49a6c" />
+                                    <circle cx="23" cy="13" r="1.5" fill="#e8d5bd" />
+                                    <circle cx="30" cy="18" r="1.3" fill="#c49a6c" />
+                                    <circle cx="5" cy="22" r="1.5" fill="#c49a6c" />
+                                    <circle cx="12" cy="25" r="1.3" fill="#e8d5bd" />
+                                    <circle cx="19" cy="23" r="1.5" fill="#c49a6c" />
+                                    <circle cx="26" cy="27" r="1.3" fill="#e8d5bd" />
+                                    <circle cx="32" cy="30" r="1.5" fill="#c49a6c" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold uppercase tracking-wider text-[#7d9175]">Powder
+                                    Texture</span>
+                                <span class="text-sm font-medium text-[#432b20]">Fine &amp; smooth particles • Rich
+                                    decoction</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- COMPARISON LINE UNDER THE CARDS -->
+                <div class="mt-8 text-center">
+                    <p data-template-id="grind-comparison-line"
+                        class="canva-text inline-block rounded-full bg-[#f1dfc8] px-6 py-2.5 text-sm font-medium text-[#5c4234] border border-[#d7bea1]/70">
+                        Filter → slightly coarser • Nice → finer &amp; smoother
+                    </p>
+                </div>
+            </section>
+
+            <!-- CUSTOM / MAKE IT YOUR WAY -->
+            <section class="w-full bg-[#ead8c1] py-16 sm:py-20">
+                <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
+                    <div class="mb-9 max-w-3xl">
+                        <p data-template-id="custom-kicker"
+                            class="canva-text mb-2 font-semibold uppercase tracking-[.16em] text-[#7d9175]">
+                            CUSTOM ☕
+                        </p>
+                        <h2 data-template-id="custom-title"
+                            class="canva-text section-heading mb-3 text-3xl sm:text-4xl font-semibold text-[#432b20]">
+                            Make it just the way you like it
+                        </h2>
+                        <p data-template-id="custom-description"
+                            class="canva-text text-base sm:text-lg leading-7 text-[#684b3c]">
+                            Choose your favourite style. There is no wrong answer — only the cup that feels most like
+                            yours.
+                        </p>
+                    </div>
+
+                    <div data-template-id="custom-panel" class="canva-panel rounded-[1.75rem] bg-[#fffaf2] p-5 sm:p-8">
+                        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            <!-- Plantation A -->
+                            <article data-template-id="bean-plantation-card"
+                                class="canva-card blend-card bean-card rounded-2xl cursor-pointer" tabindex="0">
+                                <img data-template-id="bean-plantation-image" src="images/bean_plantation.png"
+                                    alt="Plantation A Coffee Beans" loading="lazy" class="canva-image bean-card-image">
+                                <div class="bean-card-content">
+                                    <h3 data-template-id="bean-plantation-title"
+                                        class="canva-text bean-card-title font-semibold text-xl">Plantation A</h3>
+                                    <div class="bean-card-info">
+                                        <p data-template-id="bean-plantation-text"
+                                            class="canva-text bean-card-text leading-6">
+                                            Clean, sweet, rich acidity and aroma from high-altitude Arabica beans.
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- AA -->
+                            <article data-template-id="bean-aa-card"
+                                class="canva-card blend-card bean-card rounded-2xl cursor-pointer" tabindex="0">
+                                <img data-template-id="bean-aa-image" src="images/bean_aa.png" alt="AA Coffee Beans"
+                                    loading="lazy" class="canva-image bean-card-image">
+                                <div class="bean-card-content">
+                                    <h3 data-template-id="bean-aa-title"
+                                        class="canva-text bean-card-title font-semibold text-xl">AA</h3>
+                                    <div class="bean-card-info">
+                                        <p data-template-id="bean-aa-text" class="canva-text bean-card-text leading-6">
+                                            Bold, well-rounded high-grade Arabica with balanced flavor and fine body.
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- AAA -->
+                            <article data-template-id="bean-aaa-card"
+                                class="canva-card blend-card bean-card rounded-2xl cursor-pointer" tabindex="0">
+                                <img data-template-id="bean-aaa-image" src="images/bean_aaa.png" alt="AAA Coffee Beans"
+                                    loading="lazy" class="canva-image bean-card-image">
+                                <div class="bean-card-content">
+                                    <h3 data-template-id="bean-aaa-title"
+                                        class="canva-text bean-card-title font-semibold text-xl">AAA</h3>
+                                    <div class="bean-card-info">
+                                        <p data-template-id="bean-aaa-text" class="canva-text bean-card-text leading-6">
+                                            Premium size select Arabica beans delivering refined flavor and smooth
+                                            texture.
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Peaberry (PB) -->
+                            <article data-template-id="bean-peaberry-card"
+                                class="canva-card blend-card bean-card rounded-2xl cursor-pointer" tabindex="0">
+                                <img data-template-id="bean-peaberry-image" src="images/bean_peaberry.png"
+                                    alt="Peaberry PB Coffee Beans" loading="lazy" class="canva-image bean-card-image">
+                                <div class="bean-card-content">
+                                    <h3 data-template-id="bean-peaberry-title"
+                                        class="canva-text bean-card-title font-semibold text-xl">Peaberry (PB)</h3>
+                                    <div class="bean-card-info">
+                                        <p data-template-id="bean-peaberry-text"
+                                            class="canva-text bean-card-text leading-6">
+                                            Single round cherry bean, highly aromatic with intensely rich, sweet flavor.
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Robusta -->
+                            <article data-template-id="bean-robusta-card"
+                                class="canva-card blend-card bean-card rounded-2xl cursor-pointer" tabindex="0">
+                                <img data-template-id="bean-robusta-image" src="images/bean_robusta.png"
+                                    alt="Robusta Coffee Beans" loading="lazy" class="canva-image bean-card-image">
+                                <div class="bean-card-content">
+                                    <h3 data-template-id="bean-robusta-title"
+                                        class="canva-text bean-card-title font-semibold text-xl">Robusta</h3>
+                                    <div class="bean-card-info">
+                                        <p data-template-id="bean-robusta-text"
+                                            class="canva-text bean-card-text leading-6">
+                                            Strong, full-bodied bean providing thick crema, heavy body, and earthy
+                                            punch.
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Arabica -->
+                            <article data-template-id="bean-arabica-card"
+                                class="canva-card blend-card bean-card rounded-2xl cursor-pointer" tabindex="0">
+                                <img data-template-id="bean-arabica-image" src="images/bean_arabica.png"
+                                    alt="Arabica Coffee Beans" loading="lazy" class="canva-image bean-card-image">
+                                <div class="bean-card-content">
+                                    <h3 data-template-id="bean-arabica-title"
+                                        class="canva-text bean-card-title font-semibold text-xl">Arabica</h3>
+                                    <div class="bean-card-info">
+                                        <p data-template-id="bean-arabica-text"
+                                            class="canva-text bean-card-text leading-6">
+                                            Smooth, fragrant bean with subtle floral notes and bright, sweet finish.
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Chicory Info -->
+                            <article data-template-id="chicory-card"
+                                class="canva-card blend-card rounded-2xl bg-[#fffaf2] p-5 sm:col-span-2 lg:col-span-3 border border-[#d7bea1]">
+                                <h3 data-template-id="chicory-guide-title"
+                                    class="canva-text mb-2 text-xl font-semibold text-[#432b20]">
+                                    Chicory
+                                </h3>
+                                <p data-template-id="chicory-guide-text" class="canva-text leading-6 text-[#684b3c]">
+                                    Roasted chicory is a traditional coffee companion that adds body, gentle bitterness,
+                                    and a warm, earthy depth to the cup. Blend it to taste for a fuller, more rounded
+                                    brew.
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONDIMENTS -->
+            <section id="condiments" class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+                <div class="mb-9 max-w-2xl">
+                    <p data-template-id="condiments-kicker"
+                        class="canva-text mb-2 font-semibold uppercase tracking-[.16em] text-[#a95f34]">
+                        CONDIMENTS 🍯
+                    </p>
+                    <h2 data-template-id="condiments-title"
+                        class="canva-text section-heading mb-3 text-3xl sm:text-4xl font-semibold text-[#432b20]">
+                        A little something on the side
+                    </h2>
+                    <p data-template-id="condiments-description"
+                        class="canva-text text-base sm:text-lg leading-7 text-[#684b3c]">
+                        Small comforts that let every cup taste a little more like home.
+                    </p>
+                </div>
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    <!-- 1. Pepper -->
+                    <article data-template-id="condiment-pepper-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-pepper-image"
+                                src="public/c5ea0ffe-40f2-4653-b14f-ae104db0bb95.jpeg" alt="Pepper" loading="lazy"
+                                class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-pepper-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Pepper</h3>
+                            <p data-template-id="condiment-pepper-text" class="canva-text leading-6 text-[#684b3c]">
+                                Fresh, warming spice with a bold kick for everyday cooking and coffee-time favourites.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 2. Herbal Powders -->
+                    <article data-template-id="condiment-herbal-powders-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-herbal-powders-image" src="public/powders.png"
+                                alt="Herbal Powders" loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-herbal-powders-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Herbal Powders</h3>
+                            <p data-template-id="condiment-herbal-powders-text"
+                                class="canva-text leading-6 text-[#684b3c]">
+                                Thoughtfully selected herbal blends for simple, comforting everyday wellness.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 3. Jaggery -->
+                    <article data-template-id="condiment-jaggery-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-jaggery-image" src="public/jaggery.jpeg" alt="Jaggery"
+                                loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-jaggery-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Jaggery</h3>
+                            <p data-template-id="condiment-jaggery-text" class="canva-text leading-6 text-[#684b3c]">
+                                Earthy, naturally sweet and caramel-like, perfect for adding traditional sweetness.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 4. Traditional Karnataka Snacks & Fryums -->
+                    <article data-template-id="condiment-karnataka-snacks-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-karnataka-snacks-image" src="public/hapla_sandige.jpeg"
+                                alt="Traditional Karnataka Snacks & Fryums" loading="lazy"
+                                class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-karnataka-snacks-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Traditional Karnataka
+                                Snacks &amp; Fryums</h3>
+                            <p data-template-id="condiment-karnataka-snacks-text"
+                                class="canva-text leading-6 text-[#684b3c]">
+                                Crispy, crunchy favourites inspired by the traditional flavours of Karnataka.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 5. Healthy Drinks -->
+                    <article data-template-id="condiment-healthy-drinks-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-healthy-drinks-image" src="public/syrups.jpeg"
+                                alt="Healthy Drinks" loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-healthy-drinks-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Healthy Drinks</h3>
+                            <p data-template-id="condiment-healthy-drinks-text"
+                                class="canva-text leading-6 text-[#684b3c]">
+                                Wholesome drink mixes made for a comforting and refreshing everyday sip.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 6. Ginger Tea -->
+                    <article data-template-id="condiment-ginger-tea-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-ginger-tea-image" src="images/ginger_tea.png"
+                                alt="Ginger Tea" loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-ginger-tea-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Ginger Tea</h3>
+                            <p data-template-id="condiment-ginger-tea-text" class="canva-text leading-6 text-[#684b3c]">
+                                Ginger Tea for a warm, spicy tea cup with the comforting goodness of ginger.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 7. Ginger Coffee -->
+                    <article data-template-id="condiment-ginger-coffee-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-ginger-coffee-image" src="images/ginger_coffee.png"
+                                alt="Ginger Coffee" loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-ginger-coffee-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Ginger Coffee</h3>
+                            <p data-template-id="condiment-ginger-coffee-text"
+                                class="canva-text leading-6 text-[#684b3c]">
+                                Ginger coffee powder - A warming coffee with a gentle ginger kick for something a little
+                                different.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 8. Wafers -->
+                    <article data-template-id="condiment-wafers-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-wafers-image" src="public/wafers.jpeg" alt="Wafers"
+                                loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-wafers-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Wafers</h3>
+                            <p data-template-id="condiment-wafers-text" class="canva-text leading-6 text-[#684b3c]">
+                                Light, crisp and crunchy bites for an easy anytime snack.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 9. Chocolates -->
+                    <article data-template-id="condiment-chocolates-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-chocolates-image" src="public/candies.jpeg"
+                                alt="Chocolates/Candies" loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-chocolates-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Chocolates/Candies</h3>
+                            <p data-template-id="condiment-chocolates-text" class="canva-text leading-6 text-[#684b3c]">
+                                Rich, indulgent treats for those little moments of sweetness.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 10. Biscuits -->
+                    <article data-template-id="condiment-biscuits-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-biscuits-image" src="public/cookies.jpeg" alt="Biscuits"
+                                loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-biscuits-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Biscuits/Cookies</h3>
+                            <p data-template-id="condiment-biscuits-text" class="canva-text leading-6 text-[#684b3c]">
+                                Simple, familiar and comforting — perfect alongside a hot cup of coffee or tea.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 11. Chips -->
+                    <article data-template-id="condiment-chips-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-chips-image" src="images/chips.png" alt="Chips"
+                                loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-chips-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Chips</h3>
+                            <p data-template-id="condiment-chips-text" class="canva-text leading-6 text-[#684b3c]">
+                                Crispy, savoury favourites made for easy snacking.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- 12. Munchies -->
+                    <article data-template-id="condiment-munchies-card"
+                        class="canva-card condiment-card overflow-hidden rounded-[1.4rem] bg-[#fffaf2]" tabindex="0">
+                        <div class="condiment-image-wrap">
+                            <img data-template-id="condiment-munchies-image" src="images/munchies.png" alt="Munchies"
+                                loading="lazy" class="canva-image condiment-image">
+                        </div>
+                        <div class="p-5">
+                            <h3 data-template-id="condiment-munchies-title"
+                                class="canva-text mb-2 text-xl font-semibold text-[#432b20]">Munchies</h3>
+                            <p data-template-id="condiment-munchies-text" class="canva-text leading-6 text-[#684b3c]">
+                                A mix of crunchy, savoury little bites for whenever you feel like a snack.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- FACTS -->
+            <section id="facts" class="w-full bg-[#e5ecdf] py-16 sm:py-20">
+                <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
+                    <div class="mb-9 max-w-2xl">
+                        <p data-template-id="facts-kicker"
+                            class="canva-text mb-2 font-semibold uppercase tracking-[.16em] text-[#5c7155]">
+                            FACTS ☕
+                        </p>
+                        <h2 data-template-id="facts-title"
+                            class="canva-text section-heading mb-3 text-3xl sm:text-4xl font-semibold text-[#432b20]">
+                            Coffee facts, simply told
+                        </h2>
+                        <p data-template-id="facts-description"
+                            class="canva-text text-base sm:text-lg leading-7 text-[#52634d]">
+                            A few lovely things to know while your coffee is being made.
+                        </p>
+                    </div>
+                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <article data-template-id="fact-beans-card"
+                            class="canva-card fact-card rounded-2xl bg-[#fffaf2] p-5">
+                            <span class="text-2xl" aria-hidden="true">🫘</span>
+                            <h3 data-template-id="fact-beans-title"
+                                class="canva-text mb-2 mt-4 text-xl font-semibold text-[#432b20]">Coffee beans</h3>
+                            <p data-template-id="fact-beans-text" class="canva-text leading-6 text-[#52634d]">
+                                Coffee “beans” are actually seeds found inside bright red coffee cherries.
+                            </p>
+                        </article>
+
+                        <article data-template-id="fact-varieties-card"
+                            class="canva-card fact-card rounded-2xl bg-[#fffaf2] p-5">
+                            <span class="text-2xl" aria-hidden="true">🌱</span>
+                            <h3 data-template-id="fact-varieties-title"
+                                class="canva-text mb-2 mt-4 text-xl font-semibold text-[#432b20]">Arabica & Robusta</h3>
+                            <p data-template-id="fact-varieties-text" class="canva-text leading-6 text-[#52634d]">
+                                Arabica is usually smoother; Robusta is known for its stronger, bolder character.
+                            </p>
+                        </article>
+
+                        <article data-template-id="fact-roasting-card"
+                            class="canva-card fact-card rounded-2xl bg-[#fffaf2] p-5">
+                            <span class="text-2xl" aria-hidden="true">🔥</span>
+                            <h3 data-template-id="fact-roasting-title"
+                                class="canva-text mb-2 mt-4 text-xl font-semibold text-[#432b20]">Roasting</h3>
+                            <p data-template-id="fact-roasting-text" class="canva-text leading-6 text-[#52634d]">
+                                Roasting brings out coffee’s colour, aroma, and the flavours we love in every cup.
+                            </p>
+                        </article>
+
+                        <article data-template-id="fact-chicory-card"
+                            class="canva-card fact-card rounded-2xl bg-[#fffaf2] p-5">
+                            <span class="text-2xl" aria-hidden="true">🌾</span>
+                            <h3 data-template-id="fact-chicory-title"
+                                class="canva-text mb-2 mt-4 text-xl font-semibold text-[#432b20]">Chicory</h3>
+                            <p data-template-id="fact-chicory-text" class="canva-text leading-6 text-[#52634d]">
+                                Roasted chicory adds body, gentle bitterness, and a familiar traditional depth.
+                            </p>
+                        </article>
+
+                        <article data-template-id="fact-aroma-card"
+                            class="canva-card fact-card rounded-2xl bg-[#fffaf2] p-5">
+                            <span class="text-2xl" aria-hidden="true">✨</span>
+                            <h3 data-template-id="fact-aroma-title"
+                                class="canva-text mb-2 mt-4 text-xl font-semibold text-[#432b20]">Coffee aroma</h3>
+                            <p data-template-id="fact-aroma-text" class="canva-text leading-6 text-[#52634d]">
+                                Much of coffee’s flavour is experienced through its aroma — that first lovely breath
+                                matters.
+                            </p>
+                        </article>
+
+                        <article data-template-id="fact-origins-card"
+                            class="canva-card fact-card rounded-2xl bg-[#fffaf2] p-5">
+                            <span class="text-2xl" aria-hidden="true">🌍</span>
+                            <h3 data-template-id="fact-origins-title"
+                                class="canva-text mb-2 mt-4 text-xl font-semibold text-[#432b20]">Coffee origins</h3>
+                            <p data-template-id="fact-origins-text" class="canva-text leading-6 text-[#52634d]">
+                                Coffee is grown in warm regions around the world, each place bringing its own character.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+                <div data-template-id="contact-section"
+                    class="canva-section rounded-[2rem] bg-[#432b20] p-6 sm:p-10 text-[#fffaf2]">
+                    <div class="grid gap-9 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+                        <div>
+                            <p data-template-id="contact-kicker"
+                                class="canva-text mb-2 font-semibold uppercase tracking-[.16em] text-[#e8d5bd]">
+                                CONTACT ☕
+                            </p>
+                            <h2 data-template-id="contact-title"
+                                class="canva-text section-heading mb-4 text-3xl sm:text-4xl font-semibold text-[#fffaf2]">
+                                Come by for a cup of coffee or to get a beans of your choice, to get some snacks or to
+                                get something healthy.
+                            </h2>
+                            <p data-template-id="contact-description"
+                                class="canva-text max-w-md text-base sm:text-lg leading-7 text-[#f1dfc8]">
+                                We would love to welcome you in. Call us for a friendly word or visit during our opening
+                                hours.
+                            </p>
+                        </div>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div class="rounded-2xl bg-[#fffaf2] p-5">
+                                <p data-template-id="contact-shop-label"
+                                    class="canva-text mb-1 font-semibold text-[#7d9175]">Shop</p>
+                                <p data-template-id="contact-shop-value"
+                                    class="canva-text font-semibold text-[#432b20] text-lg">New Coffee Day</p>
+                            </div>
+                            <div class="rounded-2xl bg-[#fffaf2] p-5">
+                                <p data-template-id="contact-person-label"
+                                    class="canva-text mb-1 font-semibold text-[#7d9175]">Contact person</p>
+                                <p data-template-id="contact-person-value"
+                                    class="canva-text font-semibold text-[#432b20] text-lg">Prasanna A A</p>
+                            </div>
+                            <div class="rounded-2xl bg-[#fffaf2] p-5">
+                                <p data-template-id="contact-opening-label"
+                                    class="canva-text mb-1 font-semibold text-[#7d9175]">Opening time</p>
+                                <p data-template-id="contact-opening-value"
+                                    class="canva-text font-semibold text-[#432b20] text-lg">9:30 A M</p>
+                            </div>
+                            <div class="rounded-2xl bg-[#fffaf2] p-5">
+                                <p data-template-id="contact-closing-label"
+                                    class="canva-text mb-1 font-semibold text-[#7d9175]">Closing time</p>
+                                <p data-template-id="contact-closing-value"
+                                    class="canva-text font-semibold text-[#432b20] text-lg">9:20 P M</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a data-template-id="call-button"
+                        class="canva-button call-button mt-8 flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-center font-bold sm:w-fit"
+                        href="tel:[PHONE NUMBER]">
+                        <i data-lucide="phone" width="20" height="20" aria-hidden="true"></i>
+                        <span data-template-id="call-button-label" class="canva-text text-base">Call us now at
+                            9448172874</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="w-full border-t border-[#d7bea1] bg-[#f1dfc8] px-4 py-8 text-center sm:px-6">
+            <p data-template-id="footer-text" class="canva-text text-[#684b3c] font-medium">
+                © New Coffee Day. Crafting comforting cups every day.
+                To build similar website contact 8088778990 through whatsapp!
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            // Interactive Grind Selection Logic
+            const grindCards = document.querySelectorAll(".grind-card");
+            grindCards.forEach(function (card) {
+                function selectCard() {
+                    grindCards.forEach(function (c) {
+                        c.classList.remove("is-selected");
+                        c.setAttribute("aria-checked", "false");
+                        const badge = c.querySelector(".grind-selected-badge");
+                        if (badge) badge.classList.add("hidden");
+                    });
+                    card.classList.add("is-selected");
+                    card.setAttribute("aria-checked", "true");
+                    const badge = card.querySelector(".grind-selected-badge");
+                    if (badge) badge.classList.remove("hidden");
+                }
+
+                card.addEventListener("click", selectCard);
+                card.addEventListener("keydown", function (e) {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        selectCard();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
